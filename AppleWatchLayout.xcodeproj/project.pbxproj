@@ -12,6 +12,10 @@
 		B2B70E621E177BEF00CB42D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2B70E601E177BEF00CB42D0 /* Main.storyboard */; };
 		B2B70E641E177BEF00CB42D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2B70E631E177BEF00CB42D0 /* Assets.xcassets */; };
 		B2B70E671E177BEF00CB42D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2B70E651E177BEF00CB42D0 /* LaunchScreen.storyboard */; };
+		B2B70E701E177C7100CB42D0 /* AppleWatchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B70E6E1E177C7100CB42D0 /* AppleWatchCollectionViewCell.swift */; };
+		B2B70E711E177C7100CB42D0 /* AppleWatchCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2B70E6F1E177C7100CB42D0 /* AppleWatchCollectionViewCell.xib */; };
+		B2B70E751E17809700CB42D0 /* CircularCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B70E741E17809700CB42D0 /* CircularCollectionViewFlowLayout.swift */; };
+		B2B70E771E1C034100CB42D0 /* CircularCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B70E761E1C034000CB42D0 /* CircularCollectionViewLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,10 @@
 		B2B70E631E177BEF00CB42D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2B70E661E177BEF00CB42D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B2B70E681E177BEF00CB42D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2B70E6E1E177C7100CB42D0 /* AppleWatchCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleWatchCollectionViewCell.swift; sourceTree = "<group>"; };
+		B2B70E6F1E177C7100CB42D0 /* AppleWatchCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppleWatchCollectionViewCell.xib; sourceTree = "<group>"; };
+		B2B70E741E17809700CB42D0 /* CircularCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		B2B70E761E1C034000CB42D0 /* CircularCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularCollectionViewLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,12 +64,32 @@
 			children = (
 				B2B70E5C1E177BEF00CB42D0 /* AppDelegate.swift */,
 				B2B70E5E1E177BEF00CB42D0 /* ViewController.swift */,
+				B2B70E741E17809700CB42D0 /* CircularCollectionViewFlowLayout.swift */,
+				B2B70E761E1C034000CB42D0 /* CircularCollectionViewLayout.swift */,
+				B2B70E721E17804E00CB42D0 /* View */,
+				B2B70E731E17805F00CB42D0 /* Supporting Files */,
+			);
+			path = AppleWatchLayout;
+			sourceTree = "<group>";
+		};
+		B2B70E721E17804E00CB42D0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B2B70E6E1E177C7100CB42D0 /* AppleWatchCollectionViewCell.swift */,
+				B2B70E6F1E177C7100CB42D0 /* AppleWatchCollectionViewCell.xib */,
 				B2B70E601E177BEF00CB42D0 /* Main.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		B2B70E731E17805F00CB42D0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
 				B2B70E631E177BEF00CB42D0 /* Assets.xcassets */,
 				B2B70E651E177BEF00CB42D0 /* LaunchScreen.storyboard */,
 				B2B70E681E177BEF00CB42D0 /* Info.plist */,
 			);
-			path = AppleWatchLayout;
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +153,7 @@
 			files = (
 				B2B70E671E177BEF00CB42D0 /* LaunchScreen.storyboard in Resources */,
 				B2B70E641E177BEF00CB42D0 /* Assets.xcassets in Resources */,
+				B2B70E711E177C7100CB42D0 /* AppleWatchCollectionViewCell.xib in Resources */,
 				B2B70E621E177BEF00CB42D0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,7 +166,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2B70E5F1E177BEF00CB42D0 /* ViewController.swift in Sources */,
+				B2B70E701E177C7100CB42D0 /* AppleWatchCollectionViewCell.swift in Sources */,
+				B2B70E771E1C034100CB42D0 /* CircularCollectionViewLayout.swift in Sources */,
 				B2B70E5D1E177BEF00CB42D0 /* AppDelegate.swift in Sources */,
+				B2B70E751E17809700CB42D0 /* CircularCollectionViewFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
