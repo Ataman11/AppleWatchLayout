@@ -13,20 +13,60 @@ class CircularCollectionViewLayout: UICollectionViewLayout {
     public var itemSize: CGSize = CGSize(width: 50, height: 50)
     public var numberOfItemsPerRow: Int = 20
     
+    override func prepare() {
+        let x = collectionView!.frame.width / 2 - itemSize.width / 2
+        let y = collectionView!.frame.height / 2 - itemSize.height / 2
+        
+        collectionView!.contentInset = UIEdgeInsets(top: y, left: x, bottom: y, right: x)
+    }
+    
     override var collectionViewContentSize: CGSize {
         let itemCount = collectionView!.numberOfItems(inSection: 0)
-        let rowCount = row(forIndex: itemCount - 1)
+        let rowCount = row(forIndex: itemCount)
         let contentSize = CGSize(width: itemSize.width * CGFloat(numberOfItemsPerRow),
                                  height: itemSize.height * CGFloat(rowCount))
         return contentSize
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        let attributes = attributesForItem(atIndexPath: indexPath)
+        let attributes = attributesForItem(atIndexPath: indexPath, contentOffset: collectionView!.contentOffset)
         return attributes
     }
     
     override func layoutAttributesForElements(in rect: CGRect) ->  [UICollectionViewLayoutAttributes]? {
+        let attributes = attributesForElements(in: rect, contentOffset: collectionView!.contentOffset)
+        return attributes
+    }
+    
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+        
+        var offsetX: CGFloat = 0.0
+        var offsetY: CGFloat = 0.0
+        var distance = CGFloat.greatestFiniteMagnitude
+        
+        let proposedRect = CGRect(origin: proposedContentOffset, size: collectionView!.bounds.size)
+        let proposedCenterPoint = CGPoint(x: proposedRect.center.x, y: proposedRect.center.y)
+        
+        let attrs = attributesForElements(in: proposedRect, contentOffset: proposedContentOffset, isAdjustedLayuot: false)
+        
+        attrs?.forEach { attr in
+            let newOffsetX = attr.frame.center.x - proposedCenterPoint.x
+            let newOffsetY = attr.frame.center.y - proposedCenterPoint.y
+            let newDistance = sqrt(newOffsetX * newOffsetX + newOffsetY * newOffsetY)
+            
+            if newDistance < distance  {
+                distance = newDistance
+                offsetY = newOffsetY
+                offsetX = newOffsetX
+            }
+
+        }
+        
+        let targetOffset = CGPoint(x: proposedContentOffset.x + offsetX, y: proposedContentOffset.y + offsetY)
+        return targetOffset
+    }
+    
+    fileprivate func attributesForElements(in rect: CGRect, contentOffset: CGPoint, isAdjustedLayuot: Bool = true) ->  [UICollectionViewLayoutAttributes]? {
         let numberOfItems = collectionView!.numberOfItems(inSection: 0)
         var attributesArray: [UICollectionViewLayoutAttributes] = []
         
@@ -34,7 +74,7 @@ class CircularCollectionViewLayout: UICollectionViewLayout {
             let frame = initialFrameForItem(atIndex: index)
             if rect.intersects(frame) {
                 let indexPath = IndexPath(item: index, section: 0)
-                let attributes = attributesForItem(atIndexPath: indexPath)
+                let attributes = attributesForItem(atIndexPath: indexPath, contentOffset: contentOffset, isAdjustedLayuot: isAdjustedLayuot)
                 attributesArray.append(attributes)
             }
         }
@@ -42,14 +82,17 @@ class CircularCollectionViewLayout: UICollectionViewLayout {
         return attributesArray
     }
     
-    fileprivate func attributesForItem(atIndexPath indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
+    fileprivate func attributesForItem(atIndexPath indexPath: IndexPath, contentOffset: CGPoint, isAdjustedLayuot: Bool = true) -> UICollectionViewLayoutAttributes {
         let frame = initialFrameForItem(atIndex: indexPath.item)
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-
-        let attrs = adjustedAttributes(forFrame: frame)
-        attributes.frame = attrs.0
-        attributes.zIndex = attrs.1
-        attributes.size = attrs.0.size
+        
+        if !isAdjustedLayuot {
+            attributes.frame = frame
+        } else {
+            let attrs = adjustedAttributes(forFrame: frame, contentOffset: contentOffset)
+            attributes.frame = attrs.0
+            attributes.zIndex = attrs.1
+        }
         
         return attributes
     }
@@ -67,26 +110,25 @@ class CircularCollectionViewLayout: UICollectionViewLayout {
         return index / numberOfItemsPerRow
     }
     
-    fileprivate func adjustedAttributes(forFrame frame: CGRect) -> (CGRect, Int) {
+    fileprivate func adjustedAttributes(forFrame frame: CGRect, contentOffset: CGPoint) -> (CGRect, Int) {
         let halfWidth = collectionView!.frame.size.width / 2
         let halfHeight = collectionView!.frame.size.height / 2
         
-        var frame = frameWithoutContentOffset(usingFrame: frame)
-        
-        guard frame.origin.x <= halfWidth * 2
-            && frame.origin.y <= halfHeight * 2
-            && frame.origin.x >= 0
-            && frame.origin.y >= 0 else {
-                
-                return (CGRect.zero, 0)
-        }
-        
+        var frame = frame.offsetBy(dx: -contentOffset.x,
+                                   dy: -contentOffset.y)
         frame = frameByOffsetingFromCenter(usingFrame: frame)
+        
         let center = frame.center
         
         // normilize
         var x = center.x / halfWidth
         var y = center.y / halfHeight
+        
+        // guard to exclude frames outside of the `circle`
+        let initialDistance = sqrt(x * x + y * y)
+        guard initialDistance <= 1.0 else {
+            return (CGRect.zero, 0)
+        }
         
         // spherical projection - https://en.wikipedia.org/wiki/Stereographic_projection
         let divisor = 1 + x * x + y * y
@@ -101,25 +143,18 @@ class CircularCollectionViewLayout: UICollectionViewLayout {
         // adjust size based on distance from center
         var scale = 1.0 - pow(distanceFromCenter, 4)
         scale = scale * 1.3
-        let width = frame.width * scale
-        let height = frame.height * scale
+        var width = frame.width * scale
+        var height = frame.height * scale
+        width = width < 1.0 ? 1.0 : width
+        height = height < 1.0 ? 1.0 : height
         
         frame = CGRect.rect(withCenter: CGPoint(x: x, y: y),
                             size: CGSize(width: width, height: height))
-        frame = frameWithContentOffset(usingFrame: frame)
+        frame = frame.offsetBy(point: contentOffset)
         
         let zIndex = -Int(((divisor - 2) / divisor) * 100)
         
         return (frame, zIndex)
-    }
-    
-    fileprivate func frameWithoutContentOffset(usingFrame frame: CGRect) -> CGRect {
-        return frame.offsetBy(dx: -collectionView!.contentOffset.x,
-                              dy: -collectionView!.contentOffset.y)
-    }
-    
-    fileprivate func frameWithContentOffset(usingFrame frame: CGRect) -> CGRect {
-        return frame.offsetBy(point: collectionView!.contentOffset)
     }
     
     fileprivate func frameByOffsetingFromCenter(usingFrame frame: CGRect) -> CGRect {

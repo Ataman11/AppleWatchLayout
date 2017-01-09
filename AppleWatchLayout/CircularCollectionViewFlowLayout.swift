@@ -104,7 +104,7 @@ class CircularCollectionViewFlowLayout: UICollectionViewFlowLayout {
 extension CGRect {
     
     public var center: CGPoint {
-        return CGPoint(x: origin.x + width/2, y: origin.y + height/2)
+        return CGPoint(x: midX, y: midY)
     }
     
     public static func rect(withCenter center: CGPoint, size: CGSize) -> CGRect {

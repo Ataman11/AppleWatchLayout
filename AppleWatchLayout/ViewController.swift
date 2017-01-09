@@ -75,23 +75,14 @@ extension ViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        struct Temp {
-            static var row = 0
-            static var color = UIColor.red
-        }
-        
-        let row = indexPath.row / numberOfItemsPerRow()
-        if row != Temp.row {
-            Temp.row = row
-            Temp.color = UIColor(red: CGFloat(arc4random_uniform(255))/255.0,
-                                 green: CGFloat(arc4random_uniform(255))/255.0,
-                                 blue: CGFloat(arc4random_uniform(255))/255.0,
+        let column = indexPath.row / numberOfItemsPerRow()
+        let color = UIColor(red: CGFloat(sin(Float(column))),
+                                 green: CGFloat(cos(Float(column))),
+                                 blue: CGFloat(tan(Float(column))),
                                  alpha: 1.0)
-        }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellIdentifier, for: indexPath)
         
-        let color = Temp.color
         cell.backgroundColor = color
         
         return cell
@@ -120,6 +111,10 @@ extension ViewController: UICollectionViewDataSource {
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
+    
+}
+
+extension ViewController: UIScrollViewDelegate {
     
 }
 

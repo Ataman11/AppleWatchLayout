@@ -124,6 +124,7 @@
 				TargetAttributes = {
 					B2B70E581E177BEF00CB42D0 = {
 						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = B2T72YBCCD;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -290,6 +291,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = B2T72YBCCD;
 				INFOPLIST_FILE = AppleWatchLayout/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = goryaev.artem.com.AppleWatchLayout;
@@ -302,6 +304,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = B2T72YBCCD;
 				INFOPLIST_FILE = AppleWatchLayout/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = goryaev.artem.com.AppleWatchLayout;
@@ -329,6 +332,7 @@
 				B2B70E6D1E177BEF00CB42D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
