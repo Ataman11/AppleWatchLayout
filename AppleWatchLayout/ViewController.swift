@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func segmentedControlValueChanged(_ sender: Any) {
-        var layout: UICollectionViewLayout = UICollectionViewFlowLayout()
+        var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         
         switch segmentedControl.selectedSegmentIndex {
         // Flow
@@ -41,23 +41,15 @@ class ViewController: UIViewController {
         // Flow Subclass
         case 1:
             layout = CircularCollectionViewFlowLayout()
-        // Custom
-        case 2:
-            layout = CircularCollectionViewLayout()
         default:
             break
         }
         
-        if let layout = layout as? UICollectionViewFlowLayout {
-            layout.minimumInteritemSpacing = 0.0
-            layout.minimumLineSpacing = 0.0
-            layout.sectionInset = .zero
-            let side = collectionView.frame.width / 5
-            layout.itemSize = CGSize(width: side, height: side)
-        } else if let layout = layout as? CircularCollectionViewLayout {
-            let side = collectionView.frame.width / 5
-            layout.itemSize = CGSize(width: side, height: side)
-        }
+        layout.minimumInteritemSpacing = 0.0
+        layout.minimumLineSpacing = 0.0
+        layout.sectionInset = .zero
+        let side = collectionView.frame.width / 5
+        layout.itemSize = CGSize(width: side, height: side)
         
         collectionView.setCollectionViewLayout(layout, animated: true, completion: nil)
     }
@@ -100,21 +92,10 @@ extension ViewController: UICollectionViewDataSource {
             
             return Int(numberOfItems)
             
-        } else if let layout = collectionView.collectionViewLayout as? CircularCollectionViewLayout {
-            return layout.numberOfItemsPerRow
         }
-
         
         return 1
     }
-    
-}
-
-extension ViewController: UICollectionViewDelegateFlowLayout {
-    
-}
-
-extension ViewController: UIScrollViewDelegate {
     
 }
 
